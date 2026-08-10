@@ -1,4 +1,4 @@
-# AbleSpace Task Management System
+# Task Management System
 
 A full-stack task management application built as part of the AbleSpace technical assessment.
 
