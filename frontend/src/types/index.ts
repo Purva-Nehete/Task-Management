@@ -37,6 +37,34 @@ export interface Task {
   reporter?: User;
   members?: User[];
 
+  subtasks?: Subtask[];
+  comments?: Comment[];
+
+  labels?: string[];
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Subtask {
+  id: number;
+  title: string;
+  completed: boolean;
+  priority?: TaskPriority;
+  dueDate?: string | null;
+  taskId: number;
+  assigneeId?: number | null;
+  assignee?: User | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Comment {
+  id: number;
+  content: string;
+  taskId: number;
+  userId: number;
+  user?: User;
   createdAt: string;
   updatedAt: string;
 }

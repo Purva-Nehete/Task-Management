@@ -56,6 +56,8 @@ export const api = {
 };
 
 import type {
+  Comment,
+  Subtask,
   Task,
   TaskPriority,
   TaskStatus,
@@ -108,6 +110,77 @@ export async function updateTask(
 
 export async function deleteTask(
   id: number,
-): Promise<Task> {
-  return api.delete<Task>(`/tasks/${id}`);
+): Promise<void> {
+  await api.delete(`/tasks/${id}`);
+}
+
+export interface CreateSubtaskInput {
+  title: string;
+  completed?: boolean;
+}
+
+export async function createSubtask(
+  taskId: number,
+  data: CreateSubtaskInput,
+): Promise<Subtask> {
+  return api.post<Subtask>(
+    `/tasks/${taskId}/subtasks`,
+    data,
+  );
+}
+
+export async function updateSubtask(
+  id: number,
+  data: Partial<CreateSubtaskInput>,
+): Promise<Subtask> {
+  return api.patch<Subtask>(
+    `/subtasks/${id}`,
+    data,
+  );
+}
+
+export async function deleteSubtask(
+  id: number,
+): Promise<void> {
+  await api.delete(`/subtasks/${id}`);
+}
+
+export async function getComments(
+  taskId: number,
+): Promise<Comment[]> {
+  return api.get<Comment[]>(
+    `/tasks/${taskId}/comments`,
+  );
+}
+
+export async function createComment(
+  taskId: number,
+  content: string,
+  userId: number,
+): Promise<Comment> {
+  return api.post<Comment>(
+    `/tasks/${taskId}/comments`,
+    {
+      content,
+      userId,
+    },
+  );
+}
+
+export async function updateComment(
+  id: number,
+  content: string,
+): Promise<Comment> {
+  return api.patch<Comment>(
+    `/comments/${id}`,
+    {
+      content,
+    },
+  );
+}
+
+export async function deleteComment(
+  id: number,
+): Promise<void> {
+  await api.delete(`/comments/${id}`);
 }
