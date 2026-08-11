@@ -54,3 +54,60 @@ export const api = {
     });
   },
 };
+
+import type {
+  Task,
+  TaskPriority,
+  TaskStatus,
+} from '@/types';
+
+export interface CreateTaskInput {
+  title: string;
+  description?: string;
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  dueDate?: string;
+  projectId: number;
+  reporterId: number;
+  memberIds?: number[];
+}
+
+export interface UpdateTaskInput {
+  title?: string;
+  description?: string;
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  dueDate?: string;
+  projectId?: number;
+  reporterId?: number;
+  memberIds?: number[];
+}
+
+export async function getTasks(): Promise<Task[]> {
+  return api.get<Task[]>('/tasks');
+}
+
+export async function getTask(
+  id: number,
+): Promise<Task> {
+  return api.get<Task>(`/tasks/${id}`);
+}
+
+export async function createTask(
+  data: CreateTaskInput,
+): Promise<Task> {
+  return api.post<Task>('/tasks', data);
+}
+
+export async function updateTask(
+  id: number,
+  data: UpdateTaskInput,
+): Promise<Task> {
+  return api.patch<Task>(`/tasks/${id}`, data);
+}
+
+export async function deleteTask(
+  id: number,
+): Promise<Task> {
+  return api.delete<Task>(`/tasks/${id}`);
+}

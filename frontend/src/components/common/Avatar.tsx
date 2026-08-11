@@ -1,40 +1,33 @@
 interface AvatarProps {
-  name: string;
-  image?: string;
+  name?: string | null;
   size?: 'sm' | 'md' | 'lg';
 }
 
 export default function Avatar({
   name,
-  image,
   size = 'md',
 }: AvatarProps) {
-  const sizes = {
-    sm: 'h-6 w-6 text-xs',
-    md: 'h-8 w-8 text-sm',
-    lg: 'h-10 w-10 text-base',
-  };
+  const displayName = name?.trim() || 'User';
 
-  const initials = name
-    .split(' ')
+  const initials = displayName
+    .split(/\s+/)
     .map((part) => part[0])
     .join('')
-    .slice(0, 2)
-    .toUpperCase();
+    .toUpperCase()
+    .slice(0, 2);
+
+  const sizeClasses = {
+    sm: 'h-7 w-7 text-[10px]',
+    md: 'h-9 w-9 text-xs',
+    lg: 'h-12 w-12 text-sm',
+  };
 
   return (
     <div
-      className={`flex items-center justify-center overflow-hidden rounded-full bg-gray-200 font-medium ${sizes[size]}`}
+      title={displayName}
+      className={`flex items-center justify-center rounded-full border bg-gray-100 font-medium text-gray-700 ${sizeClasses[size]}`}
     >
-      {image ? (
-        <img
-          src={image}
-          alt={name}
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        initials
-      )}
+      {initials}
     </div>
   );
 }
