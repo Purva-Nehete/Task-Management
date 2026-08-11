@@ -32,7 +32,8 @@ export class SubtasksService {
     return this.prisma.subtask.create({
       data: {
         title: createSubtaskDto.title,
-        completed: createSubtaskDto.completed ?? false,
+        completed: createSubtaskDto.completed ??
+          (createSubtaskDto.status === 'COMPLETED'),
         task: {
           connect: {
             id: taskId,
@@ -87,11 +88,22 @@ export class SubtasksService {
   ) {
     await this.findOne(id);
 
+    const completed =
+      updateSubtaskDto.completed ??
+      (updateSubtaskDto.status === 'COMPLETED'
+        ? true
+        : updateSubtaskDto.status === 'TODO'
+          ? false
+          : undefined);
+
     return this.prisma.subtask.update({
       where: {
         id,
       },
-      data: updateSubtaskDto,
+      data: {
+        title: updateSubtaskDto.title,
+        completed,
+      },
     });
   }
 
