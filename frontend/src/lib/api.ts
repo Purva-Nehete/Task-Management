@@ -57,11 +57,18 @@ export const api = {
 
 import type {
   Comment,
+  Project,
   Subtask,
   Task,
   TaskPriority,
   TaskStatus,
+  User,
 } from '@/types';
+
+export interface CreateProjectInput {
+  name: string;
+  description?: string;
+}
 
 export interface CreateTaskInput {
   title: string;
@@ -83,6 +90,34 @@ export interface UpdateTaskInput {
   projectId?: number;
   reporterId?: number;
   memberIds?: number[];
+}
+
+export async function getProjects(): Promise<Project[]> {
+  return api.get<Project[]>('/projects');
+}
+
+export async function getProject(id: number): Promise<Project> {
+  return api.get<Project>(`/projects/${id}`);
+}
+
+export async function createProject(data: CreateProjectInput): Promise<Project> {
+  return api.post<Project>('/projects', data);
+}
+
+export async function updateProject(id: number, data: Partial<CreateProjectInput>): Promise<Project> {
+  return api.patch<Project>(`/projects/${id}`, data);
+}
+
+export async function deleteProject(id: number): Promise<void> {
+  await api.delete(`/projects/${id}`);
+}
+
+export async function getUser(id: number): Promise<User> {
+  return api.get<User>(`/users/${id}`);
+}
+
+export async function updateUser(id: number, data: Partial<User>): Promise<User> {
+  return api.patch<User>(`/users/${id}`, data);
 }
 
 export async function getTasks(): Promise<Task[]> {

@@ -22,7 +22,7 @@ const navigation = [
   },
   {
     label: 'Tasks',
-    href: '/dashboard',
+    href: '/tasks',
     icon: CheckSquare,
   },
   {
