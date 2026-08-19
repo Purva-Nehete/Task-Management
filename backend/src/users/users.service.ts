@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,6 +10,7 @@ import { Prisma } from '../generated/prisma/client';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { toPublicUser } from '../common/mappers/public-user.mapper';
 
 @Injectable()
 export class UsersService {
@@ -34,20 +36,24 @@ export class UsersService {
       );
     }
 
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: createUserDto,
     });
+
+    return toPublicUser(user);
   }
 
   async findAll() {
-    return this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       orderBy: {
         createdAt: 'desc',
       },
     });
+
+    return users.map(toPublicUser);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, actorId?: number) {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -58,11 +64,15 @@ export class UsersService {
       throw new NotFoundException(`User ${id} not found`);
     }
 
-    return user;
+    if (actorId !== undefined && actorId !== id) {
+      throw new ForbiddenException('You can only access your own user profile');
+    }
+
+    return toPublicUser(user);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    await this.findOne(id);
+  async update(id: number, updateUserDto: UpdateUserDto, actorId?: number) {
+    await this.findOne(id, actorId);
 
     if (updateUserDto.email || updateUserDto.username) {
       const duplicateConditions: Prisma.UserWhereInput[] = [];
@@ -95,16 +105,18 @@ export class UsersService {
       }
     }
 
-    return this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: {
         id,
       },
       data: updateUserDto,
     });
+
+    return toPublicUser(user);
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number, actorId?: number) {
+    await this.findOne(id, actorId);
 
     return this.prisma.user.delete({
       where: {
