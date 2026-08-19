@@ -8,9 +8,19 @@ import Avatar from '@/components/common/Avatar';
 
 interface TaskTableProps {
   tasks: Task[];
+  fields: TaskTableFields;
+}
+
+export interface TaskTableFields {
+  status: boolean;
+  priority: boolean;
+  members: boolean;
+  dueDate: boolean;
 }
 
 const priorityStyles = {
+  NONE: 'bg-gray-100 text-gray-700',
+  URGENT: 'bg-purple-100 text-purple-800',
   LOW: 'bg-gray-100 text-gray-700',
   MEDIUM: 'bg-yellow-100 text-yellow-800',
   HIGH: 'bg-red-100 text-red-700',
@@ -18,6 +28,7 @@ const priorityStyles = {
 
 export default function TaskTable({
   tasks,
+  fields,
 }: TaskTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border bg-white">
@@ -29,21 +40,13 @@ export default function TaskTable({
                 Task
               </th>
 
-              <th className="px-5 py-3 font-medium">
-                Status
-              </th>
+              {fields.status && <th className="px-5 py-3 font-medium">Status</th>}
 
-              <th className="px-5 py-3 font-medium">
-                Priority
-              </th>
+              {fields.priority && <th className="px-5 py-3 font-medium">Priority</th>}
 
-              <th className="px-5 py-3 font-medium">
-                Members
-              </th>
+              {fields.members && <th className="px-5 py-3 font-medium">Members</th>}
 
-              <th className="px-5 py-3 font-medium">
-                Due Date
-              </th>
+              {fields.dueDate && <th className="px-5 py-3 font-medium">Due Date</th>}
             </tr>
           </thead>
 
@@ -53,7 +56,7 @@ export default function TaskTable({
                 key={task.id}
                 className="border-b last:border-b-0 hover:bg-gray-50"
               >
-                <td className="px-5 py-4">
+                {fields.status && <td className="px-5 py-4">
                   <Link
                     href={`/tasks/${task.id}`}
                     className="font-medium hover:underline"
@@ -66,21 +69,21 @@ export default function TaskTable({
                       {task.description}
                     </p>
                   )}
-                </td>
+                </td>}
 
-                <td className="px-5 py-4">
+                {fields.priority && <td className="px-5 py-4">
                   <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs">
                     {task.status}
                   </span>
-                </td>
+                </td>}
 
-                <td className="px-5 py-4">
+                {fields.members && <td className="px-5 py-4">
                   <span
                     className={`rounded-full px-2.5 py-1 text-xs font-medium ${priorityStyles[task.priority]}`}
                   >
                     {task.priority}
                   </span>
-                </td>
+                </td>}
 
                 <td className="px-5 py-4">
                   {task.members &&
@@ -103,13 +106,13 @@ export default function TaskTable({
                   )}
                 </td>
 
-                <td className="px-5 py-4 text-gray-500">
+                {fields.dueDate && <td className="px-5 py-4 text-gray-500">
                   {task.dueDate
                     ? new Date(
                         task.dueDate,
                       ).toLocaleDateString()
                     : '—'}
-                </td>
+                </td>}
               </tr>
             ))}
           </tbody>
