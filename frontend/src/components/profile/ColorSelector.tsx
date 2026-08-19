@@ -1,10 +1,12 @@
 'use client';
 
-const colors = ['Amber', 'Blue', 'Pink', 'Rose', 'Emerald', 'Black'];
+import type { ColorMode } from '@/components/theme/ThemeProvider';
+
+const colors: ColorMode[] = ['Amber', 'Blue', 'Pink', 'Rose', 'Emerald', 'Black'];
 
 interface ColorSelectorProps {
-  selected: string;
-  onChange: (color: string) => void;
+  selected: ColorMode;
+  onChange: (color: ColorMode) => void;
 }
 
 export default function ColorSelector({
@@ -21,9 +23,8 @@ export default function ColorSelector({
             key={color}
             type="button"
             onClick={() => onChange(color)}
-            className={`rounded-lg border px-4 py-2 text-sm ${
-              selected === color ? 'border-black' : ''
-            }`}
+            aria-pressed={selected === color}
+            className={`rounded-lg border px-4 py-2 text-sm ${selected === color ? 'theme-selected' : ''}`}
           >
             {color}
           </button>

@@ -7,15 +7,15 @@ import ThemeSelector from '@/components/profile/ThemeSelector';
 import { getUser, updateUser } from '@/lib/api';
 import type { User } from '@/types';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { useTheme } from '@/components/theme/ThemeProvider';
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { theme, colorMode, setTheme, setColorMode } = useTheme();
   const [profile, setProfile] = useState<User | null>(null);
   const [fullName, setFullName] = useState('Dexter');
   const [title, setTitle] = useState('Designer');
   const [username, setUsername] = useState('Dexuser');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [colorMode, setColorMode] = useState('Blue');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

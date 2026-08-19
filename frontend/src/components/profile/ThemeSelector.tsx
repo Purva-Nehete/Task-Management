@@ -1,14 +1,13 @@
 'use client';
 
+import type { ThemeMode } from '@/components/theme/ThemeProvider';
+
 interface ThemeSelectorProps {
-  theme: 'light' | 'dark';
-  onChange: (theme: 'light' | 'dark') => void;
+  theme: ThemeMode;
+  onChange: (theme: ThemeMode) => void;
 }
 
-export default function ThemeSelector({
-  theme,
-  onChange,
-}: ThemeSelectorProps) {
+export default function ThemeSelector({ theme, onChange }: ThemeSelectorProps) {
   return (
     <div>
       <h3 className="text-sm font-semibold">Theme</h3>
@@ -17,9 +16,8 @@ export default function ThemeSelector({
         <button
           type="button"
           onClick={() => onChange('light')}
-          className={`rounded-lg border px-4 py-2 text-sm ${
-            theme === 'light' ? 'border-black' : ''
-          }`}
+          aria-pressed={theme === 'light'}
+          className={`rounded-lg border px-4 py-2 text-sm ${theme === 'light' ? 'theme-selected' : ''}`}
         >
           Light
         </button>
@@ -27,9 +25,8 @@ export default function ThemeSelector({
         <button
           type="button"
           onClick={() => onChange('dark')}
-          className={`rounded-lg border px-4 py-2 text-sm ${
-            theme === 'dark' ? 'border-black' : ''
-          }`}
+          aria-pressed={theme === 'dark'}
+          className={`rounded-lg border px-4 py-2 text-sm ${theme === 'dark' ? 'theme-selected' : ''}`}
         >
           Dark
         </button>

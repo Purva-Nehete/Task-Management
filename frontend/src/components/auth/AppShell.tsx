@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/sidebar/Sidebar';
 import Taskbar from '@/components/taskbar/Taskbar';
 import { AuthProvider, useAuth } from './AuthProvider';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
 function ProtectedShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -30,8 +31,10 @@ function ProtectedShell({ children }: { children: React.ReactNode }) {
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
-      <ProtectedShell>{children}</ProtectedShell>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <ProtectedShell>{children}</ProtectedShell>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
