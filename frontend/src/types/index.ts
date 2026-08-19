@@ -5,6 +5,8 @@ export type TaskStatus =
   | 'ON_HOLD';
 
 export type TaskPriority =
+  | 'NONE'
+  | 'URGENT'
   | 'LOW'
   | 'MEDIUM'
   | 'HIGH';

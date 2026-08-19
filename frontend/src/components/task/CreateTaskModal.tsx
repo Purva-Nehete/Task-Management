@@ -7,8 +7,10 @@ import { X } from 'lucide-react';
 import Button from '@/components/common/Button';
 
 import type {
+  Project,
   TaskPriority,
   TaskStatus,
+  User,
 } from '@/types';
 
 interface CreateTaskModalProps {
@@ -19,13 +21,20 @@ interface CreateTaskModalProps {
     description: string;
     status: TaskStatus;
     priority: TaskPriority;
+    dueDate?: string;
+    projectId: number;
+    memberIds: number[];
   }) => Promise<void>;
+  projects: Project[];
+  users: User[];
 }
 
 export default function CreateTaskModal({
   open,
   onClose,
   onSubmit,
+  projects,
+  users,
 }: CreateTaskModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] =
@@ -36,6 +45,9 @@ export default function CreateTaskModal({
 
   const [status, setStatus] =
     useState<TaskStatus>('TODO');
+  const [dueDate, setDueDate] = useState('');
+  const [projectId, setProjectId] = useState('');
+  const [memberIds, setMemberIds] = useState<number[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +64,10 @@ export default function CreateTaskModal({
       return;
     }
 
+    if (!projectId) {
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -60,12 +76,18 @@ export default function CreateTaskModal({
         description,
         status,
         priority,
+        dueDate: dueDate || undefined,
+        projectId: Number(projectId),
+        memberIds,
       });
 
       setTitle('');
       setDescription('');
       setPriority('MEDIUM');
       setStatus('TODO');
+      setDueDate('');
+      setProjectId('');
+      setMemberIds([]);
       onClose();
     } finally {
       setLoading(false);
@@ -169,6 +191,12 @@ export default function CreateTaskModal({
                 }
                 className="w-full rounded-lg border px-3 py-2 text-sm"
               >
+                <option value="NONE">
+                  None
+                </option>
+                <option value="URGENT">
+                  Urgent
+                </option>
                 <option value="LOW">
                   Low
                 </option>
@@ -180,6 +208,27 @@ export default function CreateTaskModal({
                 </option>
               </select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1 block text-sm font-medium">Project</label>
+              <select required value={projectId} onChange={(event) => setProjectId(event.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm">
+                <option value="">Select project</option>
+                {projects.map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">Due date</label>
+              <input type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Members</label>
+            <select multiple value={memberIds.map(String)} onChange={(event) => setMemberIds(Array.from(event.target.selectedOptions, (option) => Number(option.value)))} className="w-full rounded-lg border px-3 py-2 text-sm">
+              {users.map((member) => <option key={member.id} value={member.id}>{member.name}</option>)}
+            </select>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

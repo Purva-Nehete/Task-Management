@@ -137,6 +137,10 @@ export async function getUser(id: number): Promise<User> {
   return api.get<User>(`/users/${id}`);
 }
 
+export async function getUsers(): Promise<User[]> {
+  return api.get<User[]>('/users');
+}
+
 export async function updateUser(id: number, data: Partial<User>): Promise<User> {
   return api.patch<User>(`/users/${id}`, data);
 }
