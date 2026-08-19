@@ -1,5 +1,5 @@
 import TaskWorkspace from '@/components/task/TaskWorkspace';
 
-export default function DashboardPage() {
+export default function TasksPage() {
   return <TaskWorkspace />;
 }
