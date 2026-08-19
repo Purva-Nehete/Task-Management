@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -15,18 +16,24 @@ export class SubtasksService {
   async create(
     taskId: number,
     createSubtaskDto: CreateSubtaskDto,
+    userId?: number,
   ) {
     // Make sure the parent task exists
     const task = await this.prisma.task.findUnique({
       where: {
         id: taskId,
       },
+      include: { project: true, members: true },
     });
 
     if (!task) {
       throw new NotFoundException(
         `Task ${taskId} not found`,
       );
+    }
+
+    if (userId !== undefined) {
+      this.assertTaskAccess(task, userId);
     }
 
     return this.prisma.subtask.create({
@@ -43,17 +50,22 @@ export class SubtasksService {
     });
   }
 
-  async findAll(taskId: number) {
+  async findAll(taskId: number, userId?: number) {
     const task = await this.prisma.task.findUnique({
       where: {
         id: taskId,
       },
+      include: { project: true, members: true },
     });
 
     if (!task) {
       throw new NotFoundException(
         `Task ${taskId} not found`,
       );
+    }
+
+    if (userId !== undefined) {
+      this.assertTaskAccess(task, userId);
     }
 
     return this.prisma.subtask.findMany({
@@ -66,7 +78,7 @@ export class SubtasksService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId?: number) {
     const subtask = await this.prisma.subtask.findUnique({
       where: {
         id,
@@ -79,14 +91,28 @@ export class SubtasksService {
       );
     }
 
+    if (userId !== undefined) {
+      const task = await this.prisma.task.findUnique({
+        where: { id: subtask.taskId },
+        include: { project: true, members: true },
+      });
+
+      if (!task) {
+        throw new NotFoundException(`Task ${subtask.taskId} not found`);
+      }
+
+      this.assertTaskAccess(task, userId);
+    }
+
     return subtask;
   }
 
   async update(
     id: number,
     updateSubtaskDto: UpdateSubtaskDto,
+    userId?: number,
   ) {
-    await this.findOne(id);
+    await this.findOne(id, userId);
 
     const completed =
       updateSubtaskDto.completed ??
@@ -107,13 +133,19 @@ export class SubtasksService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number, userId?: number) {
+    await this.findOne(id, userId);
 
     return this.prisma.subtask.delete({
       where: {
         id,
       },
     });
+  }
+
+  private assertTaskAccess(task: { reporterId: number; project: { leadId: number | null }; members: Array<{ userId: number }> }, userId: number) {
+    if (task.reporterId !== userId && task.project.leadId !== userId && !task.members.some((member) => member.userId === userId)) {
+      throw new ForbiddenException('You do not have access to this task');
+    }
   }
 }

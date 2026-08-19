@@ -40,32 +40,33 @@ export class CommentsController {
   @Get('tasks/:taskId/comments')
   findAll(
     @Param('taskId', ParseIntPipe) taskId: number,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.commentsService.findAll(taskId);
+    return this.commentsService.findAll(taskId, user.id);
   }
 
   @Get('comments/:id')
   findOne(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.commentsService.findOne(id);
+    return this.commentsService.findOne(id, user.id);
   }
 
   @Patch('comments/:id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCommentDto: UpdateCommentDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.commentsService.update(
-      id,
-      updateCommentDto,
-    );
+    return this.commentsService.update(id, updateCommentDto, user.id);
   }
 
   @Delete('comments/:id')
   remove(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.commentsService.remove(id);
+    return this.commentsService.remove(id, user.id);
   }
 }

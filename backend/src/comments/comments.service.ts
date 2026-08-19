@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ export class CommentsService {
       where: {
         id: taskId,
       },
+      include: { project: true, members: true },
     });
 
     if (!task) {
@@ -29,6 +31,8 @@ export class CommentsService {
         `Task ${taskId} not found`,
       );
     }
+
+    this.assertTaskAccess(task, userId);
 
     // Check that user exists
     const user = await this.prisma.user.findUnique({
@@ -66,17 +70,22 @@ export class CommentsService {
     });
   }
 
-  async findAll(taskId: number) {
+  async findAll(taskId: number, userId?: number) {
     const task = await this.prisma.task.findUnique({
       where: {
         id: taskId,
       },
+      include: { project: true, members: true },
     });
 
     if (!task) {
       throw new NotFoundException(
         `Task ${taskId} not found`,
       );
+    }
+
+    if (userId !== undefined) {
+      this.assertTaskAccess(task, userId);
     }
 
     return this.prisma.comment.findMany({
@@ -94,7 +103,7 @@ export class CommentsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId?: number) {
     const comment = await this.prisma.comment.findUnique({
       where: {
         id,
@@ -111,14 +120,32 @@ export class CommentsService {
       );
     }
 
+    if (userId !== undefined) {
+      const task = await this.prisma.task.findUnique({
+        where: { id: comment.taskId },
+        include: { project: true, members: true },
+      });
+
+      if (!task) {
+        throw new NotFoundException(`Task ${comment.taskId} not found`);
+      }
+
+      this.assertTaskAccess(task, userId);
+    }
+
     return comment;
   }
 
   async update(
     id: number,
     updateCommentDto: UpdateCommentDto,
+    userId?: number,
   ) {
-    await this.findOne(id);
+    const comment = await this.findOne(id, userId);
+
+    if (userId !== undefined && comment.userId !== userId) {
+      throw new ForbiddenException('You can only edit your own comments');
+    }
 
     return this.prisma.comment.update({
       where: {
@@ -133,13 +160,23 @@ export class CommentsService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number, userId?: number) {
+    const comment = await this.findOne(id, userId);
+
+    if (userId !== undefined && comment.userId !== userId) {
+      throw new ForbiddenException('You can only delete your own comments');
+    }
 
     return this.prisma.comment.delete({
       where: {
         id,
       },
     });
+  }
+
+  private assertTaskAccess(task: { reporterId: number; project: { leadId: number | null }; members: Array<{ userId: number }> }, userId: number) {
+    if (task.project.leadId !== userId && !task.members.some((member) => member.userId === userId)) {
+      throw new ForbiddenException('You do not have access to this task');
+    }
   }
 }

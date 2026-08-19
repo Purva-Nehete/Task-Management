@@ -32,6 +32,14 @@ export class JwtAuthGuard implements CanActivate {
       .find((cookie) => cookie.startsWith(`${name}=`))
       ?.slice(name.length + 1);
 
-    return value ? decodeURIComponent(value) : undefined;
+    if (!value) {
+      return undefined;
+    }
+
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return undefined;
+    }
   }
 }
