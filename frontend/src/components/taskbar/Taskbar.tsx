@@ -5,8 +5,11 @@ import {
   Search,
   Settings,
 } from 'lucide-react';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function Taskbar() {
+  const { user, logout } = useAuth();
+
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6">
       <div className="flex w-full max-w-md items-center gap-2 rounded-lg border px-3 py-2">
@@ -34,9 +37,15 @@ export default function Taskbar() {
           <Settings size={19} />
         </button>
 
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-sm font-medium">
-          P
-        </div>
+        <button
+          type="button"
+          title="Log out"
+          onClick={() => void logout()}
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-sm font-medium"
+        >
+          {(user?.name || 'U').charAt(0).toUpperCase()}
+          <span className="sr-only">Log out</span>
+        </button>
       </div>
     </header>
   );

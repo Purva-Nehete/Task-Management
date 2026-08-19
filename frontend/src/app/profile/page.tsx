@@ -6,8 +6,10 @@ import ColorSelector from '@/components/profile/ColorSelector';
 import ThemeSelector from '@/components/profile/ThemeSelector';
 import { getUser, updateUser } from '@/lib/api';
 import type { User } from '@/types';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function ProfilePage() {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<User | null>(null);
   const [fullName, setFullName] = useState('Dexter');
   const [title, setTitle] = useState('Designer');
@@ -21,7 +23,11 @@ export default function ProfilePage() {
     async function loadProfile() {
       try {
         setLoading(true);
-        const data = await getUser(1);
+        if (!user) {
+          return;
+        }
+
+        const data = await getUser(user.id);
         setProfile(data);
         setFullName(data.name || 'Dexter');
         setTitle(data.title || 'Designer');
@@ -34,11 +40,15 @@ export default function ProfilePage() {
     }
 
     void loadProfile();
-  }, []);
+  }, [user]);
 
   async function handleSave() {
     try {
-      const updated = await updateUser(1, {
+      if (!user) {
+        return;
+      }
+
+      const updated = await updateUser(user.id, {
         name: fullName,
         title,
         username,

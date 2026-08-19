@@ -21,8 +21,10 @@ import type {
   TaskPriority,
   TaskStatus,
 } from '@/types';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [loading, setLoading] =
@@ -96,7 +98,7 @@ export default function DashboardPage() {
     const created = await createTask({
       ...data,
       projectId: 1,
-      reporterId: 1,
+      reporterId: user?.id ?? 0,
       memberIds: [],
     });
 

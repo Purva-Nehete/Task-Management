@@ -30,8 +30,10 @@ import type {
   Subtask,
   Task,
 } from '@/types';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function TaskPage() {
+  const { user } = useAuth();
   const params = useParams();
   const router = useRouter();
 
@@ -56,7 +58,7 @@ export default function TaskPage() {
    * Replace this later with the
    * authenticated/current user.
    */
-  const currentUserId = 1;
+  const currentUserId = user?.id;
 
   useEffect(() => {
     async function loadTask() {
@@ -190,12 +192,7 @@ export default function TaskPage() {
   async function handleCreateComment(
     content: string,
   ) {
-    const comment =
-      await createComment(
-        id,
-        content,
-        currentUserId,
-      );
+    const comment = await createComment(id, content);
 
     setComments((current) => [
       ...current,
@@ -269,7 +266,7 @@ export default function TaskPage() {
 
           <Comments
             comments={comments}
-            currentUserId={currentUserId}
+            currentUserId={currentUserId ?? 0}
             onCreate={handleCreateComment}
             onDelete={handleDeleteComment}
           />
