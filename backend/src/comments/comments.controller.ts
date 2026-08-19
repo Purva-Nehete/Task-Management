@@ -7,13 +7,18 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { AuthUser } from '../auth/auth.service';
 
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class CommentsController {
   constructor(
     private readonly commentsService: CommentsService,
@@ -23,10 +28,12 @@ export class CommentsController {
   create(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() createCommentDto: CreateCommentDto,
+    @CurrentUser() user: AuthUser,
   ) {
     return this.commentsService.create(
       taskId,
       createCommentDto,
+      user.id,
     );
   }
 

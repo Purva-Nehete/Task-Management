@@ -15,6 +15,7 @@ export class CommentsService {
   async create(
     taskId: number,
     createCommentDto: CreateCommentDto,
+    userId: number,
   ) {
     // Check that task exists
     const task = await this.prisma.task.findUnique({
@@ -32,13 +33,13 @@ export class CommentsService {
     // Check that user exists
     const user = await this.prisma.user.findUnique({
       where: {
-        id: createCommentDto.userId,
+        id: userId,
       },
     });
 
     if (!user) {
       throw new NotFoundException(
-        `User ${createCommentDto.userId} not found`,
+        `User ${userId} not found`,
       );
     }
 
@@ -54,7 +55,7 @@ export class CommentsService {
 
         user: {
           connect: {
-            id: createCommentDto.userId,
+            id: userId,
           },
         },
       },

@@ -7,13 +7,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 import { SubtasksService } from './subtasks.service';
 import { CreateSubtaskDto } from './dto/create-subtask.dto';
 import { UpdateSubtaskDto } from './dto/update-subtask.dto';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class SubtasksController {
   constructor(
     private readonly subtasksService: SubtasksService,
