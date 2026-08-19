@@ -69,11 +69,14 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <h1 className="text-2xl font-semibold">Profile</h1>
+    <div className="mx-auto max-w-2xl space-y-5">
+      <div>
+        <p className="text-[11px] text-gray-400">Settings</p>
+        <h1 className="mt-1 text-xl font-semibold">Profile</h1>
+      </div>
 
-      <div className="rounded-xl border bg-white">
-        <div className="flex items-center justify-between border-b p-5">
+      <div className="rounded-md border bg-white">
+        <div className="flex items-center justify-between border-b px-4 py-3">
           <span className="text-sm font-medium">Profile picture</span>
 
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500 text-sm font-semibold text-white">
@@ -81,12 +84,12 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-b p-5">
+        <div className="flex items-center justify-between border-b px-4 py-3">
           <span className="text-sm font-medium">Email</span>
           <span className="text-sm text-gray-500">{profile?.email ?? '—'}</span>
         </div>
 
-        <div className="border-b p-5">
+        <div className="border-b px-4 py-3">
           <label className="text-sm font-medium">Full name</label>
           <input
             value={fullName}
@@ -95,7 +98,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="border-b p-5">
+        <div className="border-b px-4 py-3">
           <label className="text-sm font-medium">Title</label>
           <input
             value={title}
@@ -104,7 +107,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="p-5">
+        <div className="px-4 py-3">
           <label className="text-sm font-medium">Username</label>
           <input
             value={username}
@@ -113,7 +116,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="border-t p-5">
+        <div className="border-t px-4 py-4">
           <div className="mb-5 space-y-4">
             <ThemeSelector theme={theme} onChange={setTheme} />
             <ColorSelector selected={colorMode} onChange={setColorMode} />
@@ -136,7 +139,7 @@ export default function ProfilePage() {
       <div>
         <h2 className="mb-3 text-sm font-semibold">Workspace access</h2>
 
-        <div className="flex items-center justify-between rounded-xl border bg-white p-5">
+        <div className="flex items-center justify-between rounded-md border bg-white p-4">
           <div>
             <p className="text-sm font-medium">Remove yourself from the workspace</p>
             <p className="mt-1 text-xs text-gray-500">This action will remove your workspace access.</p>
