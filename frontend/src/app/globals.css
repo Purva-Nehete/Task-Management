@@ -44,6 +44,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   transition: background-color 160ms ease, color 160ms ease;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
 }
 
 button,
@@ -89,3 +91,26 @@ select {
 .accent-button,
 [data-color] .bg-black { background-color: var(--accent); }
 .accent-soft { background-color: var(--accent-soft); color: var(--accent); }
+
+.app-sidebar,
+.app-shell header {
+  border-color: var(--border);
+}
+
+@media (max-width: 767px) {
+  .app-sidebar {
+    width: 52px;
+  }
+
+  .app-sidebar h1,
+  .app-sidebar p,
+  .app-sidebar nav a:not(:first-child) {
+    display: none;
+  }
+
+  .app-sidebar > div,
+  .app-sidebar nav {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

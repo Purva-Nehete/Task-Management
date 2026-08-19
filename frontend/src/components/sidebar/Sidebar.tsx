@@ -36,14 +36,16 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r bg-white">
-      <div className="flex h-16 items-center border-b px-6">
-        <h1 className="text-lg font-semibold">
-          Task Manager
-        </h1>
+    <aside className="app-sidebar flex h-screen w-56 shrink-0 flex-col border-r bg-white">
+      <div className="flex h-14 items-center gap-2 border-b px-4">
+        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-black text-xs font-bold text-white">T</div>
+        <div className="min-w-0">
+          <h1 className="truncate text-sm font-semibold">Task Manager</h1>
+          <p className="truncate text-[10px] text-gray-400">Personal workspace</p>
+        </div>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 p-4">
+      <nav className="flex flex-1 flex-col gap-1 p-3">
         {navigation.map((item) => {
           const Icon = item.icon;
 
@@ -55,7 +57,7 @@ export default function Sidebar() {
             <Link
               key={item.label}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-[13px] ${
                 active
                   ? 'bg-gray-100 font-medium'
                   : 'text-gray-600 hover:bg-gray-50'
