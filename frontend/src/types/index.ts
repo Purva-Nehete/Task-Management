@@ -15,6 +15,8 @@ export interface User {
   email: string;
   username: string;
   title?: string | null;
+  avatar?: string | null;
+  isGuest?: boolean;
 }
 
 export interface Project {

@@ -10,6 +10,7 @@ async function request<T>(
     `${API_URL}${endpoint}`,
     {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
@@ -64,6 +65,26 @@ import type {
   TaskStatus,
   User,
 } from '@/types';
+
+export interface AuthResponse {
+  user: User;
+}
+
+export function login(identifier: string, password: string): Promise<AuthResponse> {
+  return api.post<AuthResponse>('/auth/login', { identifier, password });
+}
+
+export function guestLogin(): Promise<AuthResponse> {
+  return api.post<AuthResponse>('/auth/guest', {});
+}
+
+export function logout(): Promise<{ success: boolean }> {
+  return api.post<{ success: boolean }>('/auth/logout', {});
+}
+
+export function getCurrentUser(): Promise<User> {
+  return api.get<User>('/auth/me');
+}
 
 export interface CreateProjectInput {
   name: string;
@@ -191,13 +212,11 @@ export async function getComments(
 export async function createComment(
   taskId: number,
   content: string,
-  userId: number,
 ): Promise<Comment> {
   return api.post<Comment>(
     `/tasks/${taskId}/comments`,
     {
       content,
-      userId,
     },
   );
 }
