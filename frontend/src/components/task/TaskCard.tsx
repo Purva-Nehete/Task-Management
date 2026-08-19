@@ -29,10 +29,10 @@ export default function TaskCard({
   return (
     <Link
       href={`/tasks/${task.id}`}
-      className="block rounded-xl border bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className="block rounded-md border bg-white p-3 shadow-none transition hover:border-gray-400 hover:shadow-sm"
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="line-clamp-2 text-sm font-semibold">
+        <h3 className="line-clamp-2 text-[13px] font-semibold leading-5">
           {task.title}
         </h3>
 
@@ -44,26 +44,26 @@ export default function TaskCard({
           }}
           className="rounded-md p-1 text-gray-400 hover:bg-gray-100"
         >
-          <MoreHorizontal size={18} />
+          <MoreHorizontal size={16} />
         </button>
       </div>
 
       {task.description && (
-        <p className="mt-2 line-clamp-2 text-xs text-gray-500">
+        <p className="mt-1 line-clamp-2 text-[11px] leading-4 text-gray-500">
           {task.description}
         </p>
       )}
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-3 flex items-center justify-between">
         <span
-          className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${priorityStyles[task.priority]}`}
+          className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${priorityStyles[task.priority]}`}
         >
           {task.priority}
         </span>
 
         {task.dueDate && (
-          <span className="flex items-center gap-1 text-xs text-gray-500">
-            <CalendarDays size={14} />
+          <span className="flex items-center gap-1 text-[10px] text-gray-500">
+            <CalendarDays size={12} />
 
             {new Date(
               task.dueDate,
@@ -73,7 +73,7 @@ export default function TaskCard({
       </div>
 
       {task.members && task.members.length > 0 && (
-        <div className="mt-4 flex -space-x-2">
+        <div className="mt-3 flex -space-x-2">
             {task.members.slice(0, 3).map(
             (member, index) => (
                 <Avatar

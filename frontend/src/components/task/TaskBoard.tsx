@@ -34,7 +34,7 @@ export default function TaskBoard({
   tasks,
 }: TaskBoardProps) {
   return (
-    <div className="grid min-w-250 grid-cols-4 gap-4">
+    <div className="grid min-w-[920px] grid-cols-4 gap-3">
       {columns.map((column) => {
         const columnTasks = tasks.filter(
           (task) => task.status === column.status,
@@ -43,21 +43,22 @@ export default function TaskBoard({
         return (
           <section
             key={column.status}
-            className="min-h-125 rounded-xl bg-gray-100/70 p-3"
+            className="min-h-[520px] rounded-md border bg-gray-50/70 p-2.5"
           >
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-2 flex items-center justify-between border-b pb-2">
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-semibold">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: column.status === 'COMPLETED' ? '#10b981' : column.status === 'DOING' ? '#f59e0b' : column.status === 'ON_HOLD' ? '#ef4444' : 'var(--accent)' }} />
+                <h2 className="text-xs font-semibold">
                   {column.label}
                 </h2>
 
-                <span className="rounded-full bg-white px-2 py-0.5 text-xs text-gray-500">
+                <span className="rounded-full bg-white px-1.5 py-0.5 text-[10px] text-gray-500">
                   {columnTasks.length}
                 </span>
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {columnTasks.map((task) => (
                 <TaskCard
                   key={task.id}
@@ -66,10 +67,11 @@ export default function TaskBoard({
               ))}
 
               {columnTasks.length === 0 && (
-                <div className="rounded-lg border border-dashed bg-white/50 p-6 text-center text-xs text-gray-400">
+                <div className="rounded-md border border-dashed bg-white/50 p-5 text-center text-[11px] text-gray-400">
                   No tasks
                 </div>
               )}
+              <button type="button" className="w-full rounded-md border border-dashed py-2 text-[11px] text-gray-400 hover:border-gray-400 hover:text-gray-600">+ Add task</button>
             </div>
           </section>
         );

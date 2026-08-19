@@ -94,11 +94,11 @@ export default function TaskWorkspace() {
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-semibold">Tasks</h1>
-            <p className="mt-1 text-sm text-gray-500">Manage and track your tasks.</p>
+            <h1 className="text-xl font-semibold">Tasks</h1>
+            <p className="mt-1 text-xs text-gray-500">Manage and track your tasks.</p>
           </div>
           <Button onClick={() => setModalOpen(true)}>
             <span className="flex items-center gap-2"><Plus size={17} />Add Task</span>
