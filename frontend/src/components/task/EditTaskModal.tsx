@@ -132,6 +132,14 @@ export default function EditTaskModal({
             }
             className="w-full rounded-lg border px-3 py-2"
           >
+            <option value="NONE">
+              None
+            </option>
+
+            <option value="URGENT">
+              Urgent
+            </option>
+
             <option value="LOW">
               Low
             </option>

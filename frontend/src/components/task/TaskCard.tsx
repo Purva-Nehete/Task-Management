@@ -16,6 +16,8 @@ interface TaskCardProps {
 }
 
 const priorityStyles = {
+  NONE: 'bg-gray-100 text-gray-700',
+  URGENT: 'bg-purple-100 text-purple-800',
   LOW: 'bg-gray-100 text-gray-700',
   MEDIUM: 'bg-yellow-100 text-yellow-800',
   HIGH: 'bg-red-100 text-red-700',
