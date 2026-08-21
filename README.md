@@ -120,9 +120,7 @@ pnpm test:e2e
 
 ## Deployment
 
-The deployment URLs are intentionally left for the owner to fill in after deployment:
-
-- Frontend: `TODO: add deployed frontend URL`
+- Frontend: `https://task-management-sepia-nu.vercel.app`
 - Backend: `https://task-management-o6yk.onrender.com`
 - Health check: `https://task-management-o6yk.onrender.com/api/health`
 
@@ -136,8 +134,9 @@ For production, set `NEXT_PUBLIC_API_URL` to the deployed API URL ending in `/ap
 
 ## Submission Checklist
 
-- [ ] Replace the three deployment placeholders above.
+- [x] Add the deployed frontend, backend, and health-check URLs.
 - [ ] Capture desktop, tablet, and mobile screenshots of the running app.
 - [ ] Complete the Part 2 screenshots or video walkthrough.
+- [x] Verify the deployed frontend and backend respond successfully.
 - [ ] Run the validation commands against the final deployed configuration.
 - [ ] Confirm the public repository and both deployments remain accessible for at least 45 days.
