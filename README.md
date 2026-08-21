@@ -123,8 +123,8 @@ pnpm test:e2e
 The deployment URLs are intentionally left for the owner to fill in after deployment:
 
 - Frontend: `TODO: add deployed frontend URL`
-- Backend: `TODO: add deployed backend URL`
-- Health check: `TODO: add deployed backend URL/api/health`
+- Backend: `https://task-management-o6yk.onrender.com`
+- Health check: `https://task-management-o6yk.onrender.com/api/health`
 
 For production, set `NEXT_PUBLIC_API_URL` to the deployed API URL ending in `/api`, set `FRONTEND_URL` to the deployed frontend origin, set a strong `JWT_SECRET`, and provide a hosted PostgreSQL `DATABASE_URL`. Run `pnpm prisma migrate deploy` during the backend release process.
 
